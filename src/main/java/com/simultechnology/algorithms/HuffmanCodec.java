@@ -23,7 +23,7 @@ class HuffmanNode implements Comparable<HuffmanNode> {
 
 public class HuffmanCodec {
     private final Map<Character, String> codeMap = new HashMap<>();
-    private HuffmanNode rootNode; // ハフマンツリーのルートノードを保存
+    private HuffmanNode rootNode; // Variable to store the root node of the Huffman tree
 
 
     public HuffmanCodec(String text) {
@@ -41,16 +41,23 @@ public class HuffmanCodec {
             queue.add(new HuffmanNode(entry.getKey(), entry.getValue()));
         }
 
-        while (queue.size() > 1) {
-            HuffmanNode left = queue.poll();
-            HuffmanNode right = queue.poll();
-            HuffmanNode parent = new HuffmanNode('\0', left.frequency + right.frequency);
-            parent.leftChild = left;
-            parent.rightChild = right;
-            queue.add(parent);
+        // 単一の文字に対応するノードを正しく扱うための修正
+        if (queue.size() == 1) {
+            HuffmanNode node = queue.poll();
+            HuffmanNode parent = new HuffmanNode('\0', node.frequency);
+            parent.leftChild = node; // 単一のノードを左子として追加
+            rootNode = parent; // 新しい親ノードをルートとして設定
+        } else {
+            while (queue.size() > 1) {
+                HuffmanNode left = queue.poll();
+                HuffmanNode right = queue.poll();
+                HuffmanNode parent = new HuffmanNode('\0', left.frequency + right.frequency);
+                parent.leftChild = left;
+                parent.rightChild = right;
+                queue.add(parent);
+            }
+            rootNode = queue.poll();
         }
-
-        rootNode = queue.poll();
         generateCodes(rootNode, "");
     }
 
