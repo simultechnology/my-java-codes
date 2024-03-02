@@ -7,7 +7,7 @@ public class HuffmanCodecTest {
 
     @Test
     public void testEncodeDecode() {
-        String originalText = "simultechnology";
+        String originalText = "ItismoreworktodoitthiswayinsteadofchunkingButthereisonebigbenefit";
         HuffmanCodec codec = new HuffmanCodec(originalText);
 
         String encoded = codec.encode(originalText);
