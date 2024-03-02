@@ -13,19 +13,20 @@ public class HuffmanCoding {
         String binaryValues = "1011011001111111100111000110010010110101101001100100000";
 
         HashMap<String, String> map = new HashMap<>();
-        map.put("l", "100");
-        map.put("o", "110");
-        map.put("y", "000");
-        map.put("c", "0010");
-        map.put("e", "0011");
-        map.put("g", "0100");
-        map.put("h", "0101");
-        map.put("i", "0110");
-        map.put("m", "0111");
-        map.put("n", "1010");
-        map.put("s", "1011");
-        map.put("t", "1110");
-        map.put("u", "1111");
+        // 符号から文字へのマップを生成
+        map.put("100", "l");
+        map.put("110", "o");
+        map.put("000", "y");
+        map.put("0010", "c");
+        map.put("0011", "e");
+        map.put("0100", "g");
+        map.put("0101", "h");
+        map.put("0110", "i");
+        map.put("0111", "m");
+        map.put("1010", "n");
+        map.put("1011", "s");
+        map.put("1110", "t");
+        map.put("1111", "u");
 
         char[] charArray = binaryValues.toCharArray();
         StringBuilder decodeBuffer = new StringBuilder();
@@ -33,15 +34,10 @@ public class HuffmanCoding {
         for (Character c : charArray) {
             System.out.print(c);
             sb.append(c);
-            Set<Map.Entry<String, String>> entries = map.entrySet();
-            for (Map.Entry<String, String> entry : entries) {
-                String key = entry.getKey();
-                String value = entry.getValue();
-                if (value.contentEquals(sb)) {
-                    System.out.println(" found");
-                    decodeBuffer.append(key);
-                    sb.delete(0, sb.length());
-                }
+            if (map.containsKey(sb.toString())) {
+                System.out.println(" found");
+                decodeBuffer.append(map.get(sb.toString()));
+                sb.delete(0, sb.length());
             }
         }
 
