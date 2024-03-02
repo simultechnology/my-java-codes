@@ -2,6 +2,7 @@ package com.simultechnology.algorithms;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.PriorityQueue;
 
 class HuffmanNode implements Comparable<HuffmanNode> {
@@ -21,7 +22,9 @@ class HuffmanNode implements Comparable<HuffmanNode> {
 }
 
 public class HuffmanCodec {
-    private Map<Character, String> codeMap = new HashMap<>();
+    private final Map<Character, String> codeMap = new HashMap<>();
+    private HuffmanNode rootNode; // ハフマンツリーのルートノードを保存
+
 
     public HuffmanCodec(String text) {
         buildHuffmanTree(text);
@@ -47,12 +50,13 @@ public class HuffmanCodec {
             queue.add(parent);
         }
 
-        generateCodes(queue.poll(), "");
+        rootNode = queue.poll();
+        generateCodes(rootNode, "");
     }
 
     private void generateCodes(HuffmanNode node, String code) {
-        if (node != null) {
-            if (node.leftChild == null && node.rightChild == null) {
+        if (!Objects.isNull(node)) {
+            if (Objects.isNull(node.leftChild) && Objects.isNull(node.rightChild)) {
                 codeMap.put(node.character, code);
             }
             generateCodes(node.leftChild, code + "0");
@@ -70,13 +74,12 @@ public class HuffmanCodec {
 
     public String decode(String encodedText) {
         StringBuilder decodedText = new StringBuilder();
-        HuffmanNode node = null; // Implement the method to get the root node of your Huffman tree
-        HuffmanNode currentNode = node;
+        HuffmanNode currentNode = rootNode;
         for (int i = 0; i < encodedText.length(); i++) {
             currentNode = encodedText.charAt(i) == '0' ? currentNode.leftChild : currentNode.rightChild;
-            if (currentNode.leftChild == null && currentNode.rightChild == null) {
+            if (Objects.isNull(currentNode.leftChild) && Objects.isNull(currentNode.rightChild)) {
                 decodedText.append(currentNode.character);
-                currentNode = node; // Reset to root
+                currentNode = rootNode;
             }
         }
         return decodedText.toString();
